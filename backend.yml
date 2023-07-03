@@ -1,0 +1,51 @@
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store-backend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      initContainers:
+      - name: check-db-ready
+        image: postgres:9.6.5
+        command: ['sh', '-c', 
+          'until pg_isready -h postgres -p 5432; 
+          do echo waiting for database; sleep 2; done;']
+      containers:
+      - name: postgres-client
+        image: postgres:15.3
+        command: ["psql"]
+        args: ["-h", "postgres", "-U", "$(POSTGRES_USER)", "-d", "$(POSTGRES_DB)"]
+        envFrom:
+        - configMapRef:
+            name: db-access
+      - name: backend
+        image: nigelpoulton/ckad:pluralsight_backend
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: db-access
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)"
+        readinessProbe:
+          httpGet:
+            path: /api/v1/
+            port: api
+        livenessProbe:
+          httpGet:
+            path: /api/v1/
+            port: api
+        ports:
+          - name: api
+            containerPort: 8000
