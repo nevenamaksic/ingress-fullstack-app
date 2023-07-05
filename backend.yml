@@ -17,7 +17,7 @@ spec:
       - name: check-db-ready
         image: postgres:9.6.5
         command: ['sh', '-c', 
-          'until pg_isready -h postgres -p 5432; 
+          'until pg_isready -h db -p 5432; 
           do echo waiting for database; sleep 2; done;']
       containers:
       - name: backend
@@ -30,7 +30,7 @@ spec:
         - name: PGPASSWORD
           value: k8srocks
         - name: DATABASE_URL
-          value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)"
+          value: "postgresql://$(POSTGRES_USER):$(PGPASSWORD)@db:5432/$(POSTGRES_DB)"
         readinessProbe:
           httpGet:
             path: /api/v1/
