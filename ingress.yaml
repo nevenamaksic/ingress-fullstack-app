@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: www.app.com
+  - host: a17d0c8b8c28b4c76a47debb8b4e472e-1231363517.eu-central-1.elb.amazonaws.com
     http:
       paths:
       - path: /
@@ -17,7 +17,7 @@ spec:
             name: frontend
             port:
               number: 80
-  - host: app.com
+  - host: a17d0c8b8c28b4c76a47debb8b4e472e-1231363517.eu-central-1.elb.amazonaws.com
     http:
       paths:
       - path: /web
@@ -34,7 +34,7 @@ spec:
             name: backend
             port:
               number: 80
-  - host: dev.app.com
+  - host: a17d0c8b8c28b4c76a47debb8b4e472e-1231363517.eu-central-1.elb.amazonaws.com
     http:
       paths:
       - path: /

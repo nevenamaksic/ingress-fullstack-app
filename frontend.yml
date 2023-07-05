@@ -19,7 +19,7 @@ spec:
             - name: API_URL
               value: http://api.kubernetes.docker.internal
           image: nigelpoulton/ckad:pluralsight_vue
-          imagePullPolicy: Always # only for local testing
+          imagePullPolicy: ifNotPresent # only for local testing
           readinessProbe:
             httpGet:
               path: /
